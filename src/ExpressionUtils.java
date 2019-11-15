@@ -5,14 +5,14 @@ import java.util.*;
 
 
 public class ExpressionUtils {
-    public static final Map<String, Integer> MAIN_MATH_OPERATIONS;
+    public static final Map<Operation, Integer> MAIN_MATH_OPERATIONS;
 
     static {
-        MAIN_MATH_OPERATIONS = new HashMap<String, Integer>();
-        MAIN_MATH_OPERATIONS.put("*", 1);
-        MAIN_MATH_OPERATIONS.put("/", 1);
-        MAIN_MATH_OPERATIONS.put("+", 2);
-        MAIN_MATH_OPERATIONS.put("-", 2);
+        MAIN_MATH_OPERATIONS = new HashMap<Operation, Integer>();
+        MAIN_MATH_OPERATIONS.put(new Multiplication(), 1);
+        MAIN_MATH_OPERATIONS.put(new Division(), 1);
+        MAIN_MATH_OPERATIONS.put(new Addition(), 2);
+        MAIN_MATH_OPERATIONS.put(new Subtraction(), 2);
     }
 
     /**
@@ -39,7 +39,7 @@ public class ExpressionUtils {
      * @return преобразованное выражение в ОПН.
      */
 
-    public static String sortingStation(String expression, Map<String, Integer> operations, String leftBracket,
+    public static Stack<String> sortingStation(String expression, Map<Operation, Integer> operations, String leftBracket,
                                         String rightBracket) {
         if (expression == null || expression.length() == 0)
             throw new IllegalStateException("Expression isn't specified.");
@@ -53,8 +53,13 @@ public class ExpressionUtils {
         // Удаление пробелов из выражения.
         expression = expression.replace(" ", "");
 
+        Set<String> operation2 = new HashSet<String>();
+        for (Operation op : operations.keySet()){
+            operation2.add(op.getOperation());
+        }
+
         // Множество "символов", не являющихся операндами (операции и скобки).
-        Set<String> operationSymbols = new HashSet<String>(operations.keySet());
+        Set<String> operationSymbols = new HashSet<String>(operation2);
         operationSymbols.add(leftBracket);
         operationSymbols.add(rightBracket);
 
@@ -115,43 +120,45 @@ public class ExpressionUtils {
         while (!stack.empty()) {
             out.add(stack.pop());
         }
-        StringBuffer result = new StringBuffer();
+        //Стек результирующий
+        Stack<String> stackRes = new Stack<String>();
         if (!out.isEmpty())
-            result.append(out.remove(0));
+            stackRes.push(out.remove(0));
         while (!out.isEmpty())
-            result.append(" ").append(out.remove(0));
+            stackRes.push(out.remove(0));
 
-        return result.toString();
+        return stackRes;
     }
-
-    public static String sortingStation(String expression, Map<String, Integer> operations) {
-        return sortingStation(expression, operations, "(", ")");
-    }
-
 
     public static BigDecimal calculateExpression(String expression) {
-        String rpn = sortingStation(expression, MAIN_MATH_OPERATIONS);
-        StringTokenizer tokenizer = new StringTokenizer(rpn, " ");
+        Stack<String> result = sortingStation(expression, MAIN_MATH_OPERATIONS, "(",")" );
         Stack<BigDecimal> stack = new Stack<BigDecimal>();
-        while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
-            // Операнд.
-            if (!MAIN_MATH_OPERATIONS.keySet().contains(token)) {
-                stack.push(new BigDecimal(token));
-            } else {
-                BigDecimal operand2 = stack.pop();
-                BigDecimal operand1 = stack.empty() ? BigDecimal.ZERO : stack.pop();
-                if (token.equals("*")) {
-                    stack.push(operand1.multiply(operand2));
-                } else if (token.equals("/")) {
-                    stack.push(operand1.divide(operand2));
-                } else if (token.equals("+")) {
-                    stack.push(operand1.add(operand2));
-                } else if (token.equals("-")) {
-                    stack.push(operand1.subtract(operand2));
+
+        Set<String> operations = new HashSet<String>();
+        for (Operation op : MAIN_MATH_OPERATIONS.keySet()){
+            operations.add(op.getOperation());
+        }
+
+        if (!result.isEmpty()){
+           for (int i = 0; i< result.size(); i++){
+                String t = result.get(i);
+                if (!operations.contains(t)) {
+                    stack.push(new BigDecimal(t));
+                } else {
+                    BigDecimal operand2 = stack.pop();
+                    BigDecimal operand1 = stack.empty() ? BigDecimal.ZERO : stack.pop();
+                    if (t.equals("*")) {
+                        stack.push(operand1.multiply(operand2));
+                    } else if (t.equals("/")) {
+                        stack.push(operand1.divide(operand2));
+                    } else if (t.equals("+")) {
+                        stack.push(operand1.add(operand2));
+                    } else if (t.equals("-")) {
+                        stack.push(operand1.subtract(operand2));
+                    }
                 }
             }
-        }
+            }
         if (stack.size() != 1)
             throw new IllegalArgumentException("Expression syntax error.");
         return stack.pop();
