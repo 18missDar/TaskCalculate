@@ -1,60 +1,70 @@
+import operations.OperationFactory;
+import operations.Operations;
+
 import java.math.BigDecimal;
 
 import java.util.*;
 
 
-
 public class ExpressionUtils {
+    public static final List<Object> result = new ArrayList<>();
+    public static final NumberBuilder nBuilder = new NumberBuilder();
 
-
-    public static List<Object> getExpression(String expression){
-        NumberBuilder nBuilder = new NumberBuilder(new StringBuilder(""));
-        OperationFactory opFactory = new OperationFactory();
-        List<Object> result = new ArrayList<>();
-        Stack<Object> stack = new Stack<>();
-
-        for (Character ch : expression.toCharArray()) {
-            Operation op = opFactory.getOperation(ch);
-            if (op != null) {
-                BigDecimal number = nBuilder.createNumber();
-                if (number != null) {
-                    result.add(number);
-                }
-                if (stack.size() > 0) //Если в стеке есть элементы
-                    if (op.compare((Operation)stack.peek()))//И если приоритет нашего оператора меньше или равен приоритету оператора на вершине стека
-                        result.add(stack.pop());
-                stack.push(op);
-            }
-            else {
-                nBuilder.put(ch);
-            }
-        }
+    public static void addNumber() {
         BigDecimal number = nBuilder.createNumber();
         if (number != null) {
             result.add(number);
         }
-        while (stack.size() > 0){
+    }
+
+
+    public static void getExpression(String expression) {
+        OperationFactory opFactory = new OperationFactory();
+        Stack<Object> stack = new Stack<>();
+
+        for (Character ch : expression.toCharArray()) {
+            Operations op = opFactory.getOperation(ch);
+            if (op != null) {
+                if (op.getPriority() == 0) {
+                    stack.push(op);
+                } else if (op.getPriority() == 1) {
+                    addNumber();
+                    Operations op1 = (Operations) stack.pop();
+
+                    while (op1.getPriority() != 0) {
+                        result.add(op1);
+                        op1 = (Operations) stack.pop();
+                    }
+                } else {
+                    addNumber();
+                    if (stack.size() > 0)
+                        if (op.compare((Operations) stack.peek()))//И если приоритет нашего оператора меньше или равен приоритету оператора на вершине стека
+                            result.add(stack.pop());
+                    stack.push(op);
+                }
+            } else {
+                nBuilder.put(ch);
+            }
+        }
+        addNumber();
+        while (stack.size() > 0) {
             result.add(stack.pop());
         }
-        return result;
     }
 
 
     public static BigDecimal calculateExpression(String expression) {
-        List<Object> result =  getExpression(expression);
+        getExpression(expression);
         Stack<BigDecimal> numbers = new Stack<>();
 
         for (Object object : result) {
-            if (object instanceof Operation) {
+            if (object instanceof Operations) {
                 BigDecimal operand2 = numbers.pop();
                 BigDecimal operand1 = numbers.empty() ? BigDecimal.ZERO : numbers.pop();
-                Operation op = (Operation)object;
-                numbers.push(op.execute(operand1, operand2));
+                numbers.push(((Operations)object).execute(operand1, operand2));
 
-            }
-            else {
-                BigDecimal operand = (BigDecimal)object;
-                numbers.push(operand);
+            } else {
+                numbers.push((BigDecimal) object);
             }
 
         }

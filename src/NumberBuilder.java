@@ -1,21 +1,18 @@
 import java.math.BigDecimal;
 
 public class NumberBuilder {
-    private StringBuilder number;
+    private StringBuilder number = new StringBuilder("");
 
-    public NumberBuilder(StringBuilder number) {
-        this.number = number;
-    }
-
-    public BigDecimal createNumber(){
-        if (number != null){
-            String copy = number.toString();
-            number.setLength(0);
+    public BigDecimal createNumber() {
+        String copy = number.toString();
+        if (number != null && !copy.equals("")) {
+            number = new StringBuilder("");
             return new BigDecimal(copy);
         }
         return null;
     }
-    public void put(Character ch){
+
+    public void put(Character ch) {
         number.append(ch);
     }
 }
