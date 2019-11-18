@@ -19,11 +19,11 @@ public class ExpressionUtils {
 
 
     public static void getExpression(String expression) {
-        OperationFactory opFactory = new OperationFactory();
+        OperationFactory opFactory;
         Stack<Object> stack = new Stack<>();
 
         for (Character ch : expression.toCharArray()) {
-            Operations op = opFactory.getOperation(ch);
+            Operations op = OperationFactory.getOperation(ch);
             if (op != null) {
                 if (op.getPriority() == 0) {
                     stack.push(op);

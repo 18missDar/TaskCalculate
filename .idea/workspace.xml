@@ -2,25 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88a03bcd-3124-45ff-8acd-5bb09e818268" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/operations/OperationFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Calculate/Addition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Calculate/Division.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Calculate/ExpressionUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Calculate/ExpressionUtils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Calculate/Multiplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Calculate/NumberBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Calculate/NumberBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Calculate/Operation.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Calculate/OperationFactory.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Calculate/Subtraction.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Addition.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Division.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ExpressionUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ExpressionUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Multiplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/NumberBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NumberBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Operation.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OperationFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Subtraction.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/operations/OperationFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/OperationFactory.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
